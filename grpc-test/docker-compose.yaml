@@ -1,0 +1,36 @@
+version: "3.7"
+services:
+
+  grpc-test:
+    image: mcr.microsoft.com/java/jre:11u5-zulu-alpine
+    command: java -jar /opt/grpc-test-fat.jar
+    volumes:
+      - ./build/libs/grpc-test-fat.jar:/opt/grpc-test-fat.jar
+    networks:
+      envoymesh:
+        aliases:
+          - grpc-test
+    expose:
+      - "8081"
+    ports:
+      - "8081:8081"
+
+  grpc-test-proxy:
+    image: envoyproxy/envoy
+    command: /usr/local/bin/envoy -c /etc/server-envoy-proxy.yaml --service-cluster grpc-test-proxy
+    volumes:
+      - ./server-envoy-proxy.yaml:/etc/server-envoy-proxy.yaml
+      - ./libjaegertracing_plugin.linux_amd64.so:/usr/local/lib/libjaegertracing_plugin.so
+    networks:
+      envoymesh:
+        aliases:
+          - grpc-test-proxy
+    expose:
+      - "8811"
+      - "8881"
+    ports:
+      - "8811:8811"
+      - "8881:8881"
+
+networks:
+  envoymesh: {}

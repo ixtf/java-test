@@ -1,0 +1,37 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.google.protobuf'
+    id "com.github.johnrengelman.shadow"
+}
+
+mainClassName = "org.jzb.test.rsocket.Backend"
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    compile "com.github.ixtf.japp:core"
+    compile "com.google.inject:guice"
+    compile "io.vertx:vertx-web"
+    compile "com.netifi:netifi-broker-client"
+    compile "com.google.protobuf:protobuf-java"
+    compile 'io.jaegertracing:jaeger-client:1.1.0'
+    compile 'com.googlecode.protobuf-java-format:protobuf-java-format:1.4'
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc'
+    }
+    plugins {
+        rsocketRpc {
+            artifact = 'io.rsocket.rpc:rsocket-rpc-protobuf'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            rsocketRpc {}
+        }
+    }
+}

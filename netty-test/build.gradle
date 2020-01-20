@@ -1,0 +1,11 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    compile "com.github.ixtf.japp:core"
+    compile group: 'io.netty', name: 'netty-all', version: '4.1.43.Final'
+}

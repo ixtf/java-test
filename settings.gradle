@@ -1,0 +1,10 @@
+rootProject.name = 'java-test'
+include 'grpc-test'
+include 'vertx-grpc'
+include 'rsocket-test'
+include 'rapidoid-test'
+include 'vertx-advance'
+include 'netty-test'
+include 'helidon-test'
+
+//enableFeaturePreview("IMPROVED_POM_SUPPORT")

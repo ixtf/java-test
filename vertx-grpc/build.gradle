@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf'
+    id 'com.google.osdetector'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+// linux-x86_64
+def tcnative_classifier = osdetector.classifier;
+// Fedora variants use a different soname for OpenSSL than other linux distributions
+// (see http://netty.io/wiki/forked-tomcat-native.html).
+if (osdetector.os == "linux" && osdetector.release.isLike("fedora")) {
+    tcnative_classifier += "-fedora";
+}
+
+dependencies {
+    compile "com.github.ixtf.persistence:mongo",
+            "io.vertx:vertx-web",
+            "io.vertx:vertx-grpc",
+            'io.grpc:grpc-netty-shaded',
+            'io.grpc:grpc-protobuf',
+            'io.grpc:grpc-stub'
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc"
+    }
+    plugins {
+        grpc {
+            artifact = 'io.vertx:protoc-gen-grpc-java:1.25.0'
+        }
+    }
+    generateProtoTasks {
+        all()*.plugins {
+            grpc {}
+        }
+    }
+}

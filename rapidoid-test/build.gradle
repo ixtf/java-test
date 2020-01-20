@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'com.google.protobuf'
+    id 'com.google.osdetector'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    compile "com.github.ixtf.persistence:mongo",
+            "org.rapidoid:rapidoid-http-server:5.5.5",
+            "com.dslplatform:dsl-json:1.9.3"
+
+    annotationProcessor 'com.dslplatform:dsl-json-processor:1.9.3'
+}

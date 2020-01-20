@@ -1,0 +1,46 @@
+plugins {
+    id "idea"
+    id "maven"
+    id "maven-publish"
+    id "io.spring.dependency-management" version "1.0.8.RELEASE"
+    id "io.franzbecker.gradle-lombok" version "3.2.0" apply false
+    id "com.github.johnrengelman.shadow" version "5.2.0" apply false
+    id "com.palantir.docker" version "0.22.1" apply false
+    id 'com.google.protobuf' version '0.8.10' apply false
+    id 'com.google.osdetector' version '1.6.2' apply false
+}
+
+subprojects {
+    group 'org.jzb.test'
+    version '1.0-SNAPSHOT'
+
+    apply plugin: "idea"
+    apply plugin: "maven"
+    apply plugin: "maven-publish"
+    apply plugin: "io.spring.dependency-management"
+    apply plugin: "io.franzbecker.gradle-lombok"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2" }
+        maven { url "https://jitpack.io" }
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "com.netifi:netifi-bom:${netifiBomVersion}"
+            mavenBom "io.helidon:helidon-bom:1.4.1"
+            mavenBom "com.github.ixtf:bom:${bomVersion}"
+        }
+
+        dependencies {
+            dependency "com.google.protobuf:protobuf-java:${protobufVersion}"
+            dependency "com.google.protobuf:protoc:${protobufVersion}"
+            dependency "io.rsocket:rsocket-core:${rsocketVersion}"
+            dependency "io.rsocket:rsocket-transport-netty:${rsocketVersion}"
+            dependency "io.rsocket.rpc:rsocket-rpc-protobuf:${rsocketRpcVersion}"
+            dependency "io.rsocket.rpc:rsocket-rpc-core:${rsocketRpcVersion}"
+        }
+    }
+}

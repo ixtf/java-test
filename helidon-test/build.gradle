@@ -1,0 +1,62 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 11
+targetCompatibility = 11
+
+dependencies {
+    compile 'io.helidon.webserver:helidon-webserver'
+    compile 'io.helidon.config:helidon-config-yaml'
+    compile 'io.helidon.media.jsonp:helidon-media-jsonp-server'
+    compile 'io.helidon.media.jackson:helidon-media-jackson-server'
+    compile 'io.helidon.security.providers:helidon-security-providers-jwt'
+    compile 'io.helidon.security.providers:helidon-security-providers-http-auth'
+    compile 'io.helidon.security.integration:helidon-security-integration-webserver'
+    compile 'io.helidon.security.integration:helidon-security-integration-grpc'
+    compile 'io.helidon.health:helidon-health'
+    compile 'io.helidon.health:helidon-health-checks'
+    compile 'io.helidon.metrics:helidon-metrics'
+    compile 'io.helidon.tracing:helidon-tracing-jaeger'
+// https://mvnrepository.com/artifact/io.jaegertracing/jaeger-client
+    compile group: 'io.jaegertracing', name: 'jaeger-client', version: '1.1.0'
+
+//    compile 'io.helidon.microprofile.bundles:helidon-microprofile-1.2'
+//    compile 'org.glassfish.jersey.media:jersey-media-json-binding:2.29.1'
+//    runtime 'org.jboss:jandex:2.1.2.Final'
+//    runtime 'javax.activation:javax.activation-api:1.2.0'
+//    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+//    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.1.0'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+// define a custom task to copy all dependencies in the runtime classpath
+// into build/libs/libs
+// uses built-in Copy
+task copyLibs(type: Copy) {
+    from configurations.runtime
+    into 'build/libs/libs'
+}
+
+// add it as a dependency of built-in task 'assemble'
+copyLibs.dependsOn jar
+assemble.dependsOn copyLibs
+
+// default jar configuration
+// set the main classpath
+// add each jar under build/libs/libs into the classpath
+jar {
+    archiveName = "${project.name}.jar"
+//    archiveFileName = "${project.name}.jar"
+    manifest {
+        attributes('Main-Class': 'org.jzb.test.helidon.Main',
+                'Class-Path': configurations.runtime.files.collect { "libs/$it.name" }.join(' ')
+        )
+    }
+}
