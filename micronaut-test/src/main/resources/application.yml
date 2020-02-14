@@ -1,0 +1,43 @@
+micronaut:
+  application:
+    name: micronaut-test
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedMethods:
+            - POST
+            - PUT
+          allowedHeaders:
+            - Content-Type
+            - Authorization
+  router:
+    static-resources:
+      default:
+        enabled: true
+        mapping: /**
+        paths: classpath:public
+      swagger:
+        enabled: true
+        paths: "classpath:META-INF/swagger"
+        mapping: "/swagger/**"
+
+endpoints:
+  caches:
+    enabled: true
+  stop:
+    enabled: true
+
+
+#mongodb:
+#  uri: mongodb://username:password@localhost:27017/databaseName
+#
+#redis:
+#  uri: redis://localhost
+
+#tracing:
+#  jaeger:
+#    enabled: true
+#    sampler:
+#      probability: 1

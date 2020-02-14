@@ -6,5 +6,8 @@ include 'rapidoid-test'
 include 'vertx-advance'
 include 'netty-test'
 include 'helidon-test'
+include 'micronaut-test'
 
 //enableFeaturePreview("IMPROVED_POM_SUPPORT")
+include 'lintcode'
+
